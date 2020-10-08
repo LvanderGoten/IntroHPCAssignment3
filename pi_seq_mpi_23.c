@@ -10,13 +10,13 @@
 
 int main(int argc, char* argv[])
 {
+    MPI_Init(&argc, &argv);
     double t1, t2; 
     t1 = MPI_Wtime();
 
     int process_id;
     int num_processes;
 
-    MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &num_processes);
     MPI_Comm_rank(MPI_COMM_WORLD, &process_id);
 #ifdef DEBUG
@@ -74,15 +74,14 @@ int main(int argc, char* argv[])
         }
 
         pi = ((long double) global_count / (long double) NUM_ITER) * 4.0;
-        printf("The result is %f\n", pi);
+        t2 = MPI_Wtime(); 
+        printf("RESULT=%f\tTIME=%f\tPROGRAM=23\tNPROC=%d\n", pi, t2 - t1, num_processes);
+
         free(other_counts);
         free(requests);
     } else {
         MPI_Ssend(&count, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD);
     }
-
-    t2 = MPI_Wtime(); 
-    printf( "Elapsed time is %f\n", t2 - t1 ); 
 
     MPI_Finalize();
     return 0;
