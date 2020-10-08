@@ -11,6 +11,9 @@
 
 int main(int argc, char* argv[])
 {
+    double t1, t2; 
+    t1 = MPI_Wtime(); 
+
     int process_id;
     int num_processes;
 
@@ -63,6 +66,9 @@ int main(int argc, char* argv[])
         pi = ((long double) global_count / (long double) NUM_ITER) * 4.0;
         printf("The result is %f\n", pi);
     }
+
+    t2 = MPI_Wtime(); 
+    printf( "Elapsed time is %f\n", t2 - t1 ); 
 
     MPI_Finalize();
     return 0;

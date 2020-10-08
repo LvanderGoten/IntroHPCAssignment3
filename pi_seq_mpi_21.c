@@ -10,13 +10,18 @@
 
 int main(int argc, char* argv[])
 {
+    double t1, t2; 
+    t1 = MPI_Wtime(); 
+
     int process_id;
     int num_processes;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &num_processes);
     MPI_Comm_rank(MPI_COMM_WORLD, &process_id);
+#ifdef DEBUG
     printf("Initialized process %d/%d\n", process_id, num_processes);
+#endif
 
     long long count = 0;
     double x, y, z, pi;
@@ -28,7 +33,9 @@ int main(int argc, char* argv[])
     if (process_id == 0) {
         iter_per_proc += NUM_ITER % num_processes;
     } 
+#ifdef DEBUG
     printf("Num iterations %ld [process-id %d]\n", iter_per_proc, process_id);
+#endif
     for (long long iter = 0; iter < iter_per_proc; iter++)
     {
         // Generate random (X,Y) points
@@ -59,6 +66,9 @@ int main(int argc, char* argv[])
 
         printf("The result is %f\n", pi);
     }
+
+    t2 = MPI_Wtime(); 
+    printf( "Elapsed time is %f\n", t2 - t1 ); 
 
     MPI_Finalize();
     return 0;

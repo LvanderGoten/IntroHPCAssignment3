@@ -11,6 +11,9 @@
 
 int main(int argc, char* argv[])
 {
+    double t1, t2; 
+    t1 = MPI_Wtime();
+
     int process_id;
     int num_processes;
 
@@ -62,10 +65,10 @@ int main(int argc, char* argv[])
         long long *counts = malloc(sizeof(long long) * num_processes);
 
         // Gather counts
-        MPI_Gather(&count, 1, MPI_LONG_LONG, counts, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+        MPI_Gather(&count, 1, MPI_LONG_LONG, counts, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
         
         for (int p_id = 0; p_id < num_processes; p_id++) {
-            global_count += count[p_id];
+            global_count += counts[p_id];
         }
 
         pi = ((long double) global_count / (long double) NUM_ITER) * 4.0;
@@ -74,8 +77,11 @@ int main(int argc, char* argv[])
         free(counts);
     } else {
         // Gather counts
-        MPI_Gather(&count, 1, MPI_LONG_LONG, NULL, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+        MPI_Gather(&count, 1, MPI_LONG_LONG, NULL, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     }
+
+    t2 = MPI_Wtime(); 
+    printf( "Elapsed time is %f\n", t2 - t1 ); 
 
     MPI_Finalize();
     return 0;

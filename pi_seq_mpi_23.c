@@ -10,6 +10,9 @@
 
 int main(int argc, char* argv[])
 {
+    double t1, t2; 
+    t1 = MPI_Wtime();
+
     int process_id;
     int num_processes;
 
@@ -77,6 +80,9 @@ int main(int argc, char* argv[])
     } else {
         MPI_Ssend(&count, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD);
     }
+
+    t2 = MPI_Wtime(); 
+    printf( "Elapsed time is %f\n", t2 - t1 ); 
 
     MPI_Finalize();
     return 0;
