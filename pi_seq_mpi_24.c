@@ -12,7 +12,7 @@
 int main(int argc, char* argv[])
 {
     MPI_Init(&argc, &argv);
-    double t1, t2; 
+    double t1, t2, t3;
     t1 = MPI_Wtime();
 
     int process_id;
@@ -58,6 +58,8 @@ int main(int argc, char* argv[])
         }
     }
 
+    t2 = MPI_Wtime();
+
     // Estimate Pi and display the result
     if (process_id == 0)
     {
@@ -72,8 +74,8 @@ int main(int argc, char* argv[])
         }
 
         pi = ((long double) global_count / (long double) NUM_ITER) * 4.0;
-        t2 = MPI_Wtime(); 
-        printf("RESULT=%f\tTIME=%f\tPROGRAM=24\tNPROC=%d\n", pi, t2 - t1, num_processes);
+        t3 = MPI_Wtime();
+        printf("RESULT=%f\tTIME_SAMPLING=%f\tTIME_DIST=%f\tPROGRAM=24\tNPROC=%d\n", pi, t2 - t1, t3 - t2, num_processes);
 
         free(counts);
     } else {

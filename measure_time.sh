@@ -1,7 +1,6 @@
 #! /bin/bash
 NUM_REPS=10
-#NUM_PROCESSES="2\n4\n8\n16\n32"
-NUM_PROCESSES="2\n4"
+NUM_PROCESSES="2\n4\n8\n16\n32"
 
 # Compile .c files
 ls -1 | grep -E "pi_seq_mpi_.*.c" | xargs -I {} sh -c ' mpicc -o `basename {} .c` {}'
@@ -16,7 +15,7 @@ do
 done
 
 # Convert to CSV
-cat elapsed_times.tsv | awk -F'[=\t]' -v OFS=',' '{print $1, $3, $5, $7}' | head -n 1 >> elapsed_times.csv
+cat elapsed_times.tsv | awk -F'[=\t]' -v OFS=',' '{print $1, $3, $5, $7}' | head -n 1 > elapsed_times.csv
 cat elapsed_times.tsv | awk -F'[=\t]' -v OFS=',' '{print $2, $4, $6, $8}' >> elapsed_times.csv
 
 
